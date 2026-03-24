@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stockholm Naprapat – Prestationsinriktad kroppsvård</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080808;
+    --dark: #111111;
+    --gray: #1a1a1a;
+    --border: rgba(255,255,255,0.07);
+    --white: #f0eeea;
+    --muted: #777;
+    --accent: #e8f542;
+    --accent-dark: #b8c232;
+    --red: #e84242;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 2.5rem;
+    background: rgba(8,8,8,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-book {
+    background: var(--accent) !important;
+    color: var(--black) !important;
+    padding: 0.5rem 1.3rem;
+    border-radius: 2px;
+    font-weight: 500 !important;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    padding-top: 70px;
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem 2.5rem 3rem;
+    padding-top: 90px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: clamp(160px, 25vw, 320px);
+    letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.025);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+  .hero-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.2s forwards;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 14vw, 14rem);
+    line-height: 0.88;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 400px;
+    line-height: 1.8;
+  }
+  .hero-cta { display: flex; gap: 1rem; align-items: center; }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--black);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-ghost {
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-ghost:hover { color: var(--white); }
+
+  /* TICKER */
+  .ticker {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+    background: var(--dark);
+  }
+  .ticker-inner {
+    display: flex; gap: 3rem;
+    white-space: nowrap;
+    animation: ticker 20s linear infinite;
+    width: max-content;
+  }
+  .ticker-item {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    display: flex; align-items: center; gap: 3rem;
+  }
+  .ticker-dot { width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* SERVICES */
+  #tjanster { padding: 7rem 2.5rem; }
+  .services-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2rem;
+  }
+  .services-header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .services-header h2 span { color: var(--accent); }
+  .services-header p { color: var(--muted); font-size: 0.9rem; max-width: 300px; text-align: right; }
+  .services-list { display: flex; flex-direction: column; }
+  .service-item {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr 160px;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .service-item:hover { padding-left: 1rem; }
+  .service-num {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .service-name {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .service-item:hover .service-name { color: var(--accent); }
+  .service-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+  .service-price {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    text-align: right;
+  }
+  .service-price span { font-family: var(--font-body); font-size: 0.75rem; color: var(--muted); display: block; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* STATS */
+  .stats-band {
+    background: var(--accent);
+    padding: 4rem 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    color: var(--black);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.55); margin-top: 0.5rem; }
+
+  /* BOOKING */
+  #bokning { padding: 7rem 2.5rem; background: var(--dark); }
+  .booking-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .booking-left h2 {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+  }
+  .booking-left h2 span { color: var(--accent); }
+  .booking-left p { color: var(--muted); font-size: 0.95rem; line-height: 1.8; max-width: 400px; }
+  .booking-info-list { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
+  .booking-info-item { display: flex; gap: 1rem; align-items: center; font-size: 0.88rem; color: var(--muted); }
+  .booking-info-item::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+  .booking-form { background: var(--gray); padding: 2.5rem; border: 1px solid var(--border); border-radius: 4px; }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label { display: block; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+  .form-group input, .form-group select {
+    width: 100%; padding: 0.85rem 1rem;
+    background: var(--black); border: 1px solid var(--border);
+    color: var(--white); font-family: var(--font-body); font-size: 0.9rem;
+    outline: none; transition: border-color 0.2s; border-radius: 2px;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
+  .form-group select option { background: var(--black); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-submit {
+    width: 100%; background: var(--accent); color: var(--black);
+    border: none; padding: 1rem; font-family: var(--font-body);
+    font-weight: 500; font-size: 0.85rem; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer; transition: background 0.2s;
+    border-radius: 2px; margin-top: 0.5rem;
+  }
+  .form-submit:hover { background: var(--accent-dark); }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    border-top: 1px solid var(--border);
+    padding: 3rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.06em; color: var(--white); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { font-size: 0.8rem; color: var(--muted); }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 1.5rem; padding-top: 80px; }
+    #tjanster { padding: 5rem 1.5rem; }
+    .services-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .services-header p { text-align: left; }
+    .service-item { grid-template-columns: 40px 1fr; }
+    .service-desc, .service-price { display: none; }
+    .stats-band { grid-template-columns: repeat(2, 1fr); }
+    #bokning { padding: 5rem 1.5rem; }
+    .booking-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; align-items: flex-start; }
+    .hero-bottom { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">STOCKHOLM <span>NAPRAPAT</span></a>
+  <ul class="nav-links">
+    <li><a href="#tjanster">Tjänster</a></li>
+    <li><a href="#bokning">Boka tid</a></li>
+    <li><a href="#bokning" class="nav-book">Boka nu</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg-text">NAPRAPAT</div>
+  <p class="hero-tag">Prestationsinriktad kroppsvård · Stockholm</p>
+  <h1>RÖRLIG.<br><span class="accent">STARK.</span><br>SMÄRTFRI.</h1>
+  <div class="hero-bottom">
+    <p class="hero-sub">Naprapatbehandling för dig som vill prestera bättre — i vardagen, på gymmet och i livet. Vi behandlar orsaken, inte bara symptomet.</p>
+    <div class="hero-cta">
+      <a href="#bokning" class="btn-primary">Boka din tid →</a>
+      <a href="#tjanster" class="btn-ghost">Våra tjänster ↓</a>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <div class="ticker-item">Naprapatbehandling <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Rygg &amp; nacke <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Sportnaprapat <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Rehabilitering <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Triggerpunktsbehandling <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Stockholm City <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Naprapatbehandling <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Rygg &amp; nacke <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Sportnaprapat <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Rehabilitering <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Triggerpunktsbehandling <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Stockholm City <span class="ticker-dot"></span></div>
+  </div>
+</div>
+
+<!-- TJÄNSTER -->
+<section id="tjanster">
+  <div class="services-header">
+    <h2>VÅRA<br><span>TJÄNSTER</span></h2>
+    <p>Alla behandlingar är individanpassade och utgår från din specifika situation och dina mål.</p>
+  </div>
+  <div class="services-list">
+    <div class="service-item">
+      <span class="service-num">01</span>
+      <span class="service-name">NAPRAPATBEHANDLING</span>
+      <span class="service-desc">Helhetsorienterad behandling av rygg, nacke, axlar och extremiteter. Kombinerar manipulation, mjukdelsterapi och träningsrådgivning.</span>
+      <div class="service-price">850 kr<span>60 minuter</span></div>
+    </div>
+    <div class="service-item">
+      <span class="service-num">02</span>
+      <span class="service-name">SPORTNAPRAPAT</span>
+      <span class="service-desc">Specialanpassad behandling för idrottare. Förbättra prestation, förebygg skador och snabba upp återhämtning.</span>
+      <div class="service-price">1 000 kr<span>75 minuter</span></div>
+    </div>
+    <div class="service-item">
+      <span class="service-num">03</span>
+      <span class="service-name">TRIGGERPUNKTER</span>
+      <span class="service-desc">Effektiv behandling av muskler med triggerpunkter som orsakar lokal och refererad smärta.</span>
+      <div class="service-price">750 kr<span>45 minuter</span></div>
+    </div>
+    <div class="service-item">
+      <span class="service-num">04</span>
+      <span class="service-name">REHABILITERING</span>
+      <span class="service-desc">Strukturerat rehabiliteringsprogram med individuellt anpassade övningar för att återfå full funktion.</span>
+      <div class="service-price">950 kr<span>60 minuter</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stat-item">
+    <div class="stat-num">800+</div>
+    <div class="stat-label">Patienter behandlade</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">8</div>
+    <div class="stat-label">Års erfarenhet</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">97%</div>
+    <div class="stat-label">Nöjda patienter</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">4.9</div>
+    <div class="stat-label">Google-betyg</div>
+  </div>
+</div>
+
+<!-- BOKNING -->
+<section id="bokning">
+  <div class="booking-grid">
+    <div class="booking-left">
+      <h2>BOKA<br><span>DIN TID</span><br>IDAG</h2>
+      <p>Fyll i formuläret så bekräftar vi din bokning inom några timmar. Första besöket inkluderar alltid en noggrann undersökning.</p>
+      <div class="booking-info-list">
+        <div class="booking-info-item">Måndag–fredag 07:00–20:00</div>
+        <div class="booking-info-item">Lördag 08:00–15:00</div>
+        <div class="booking-info-item">Sveavägen 98, Stockholm</div>
+        <div class="booking-info-item">info@stockholmnaprapat.se</div>
+      </div>
+    </div>
+    <div class="booking-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Förnamn</label>
+          <input type="text" placeholder="Erik">
+        </div>
+        <div class="form-group">
+          <label>Efternamn</label>
+          <input type="text" placeholder="Johansson">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>E-post</label>
+        <input type="email" placeholder="erik@exempel.se">
+      </div>
+      <div class="form-group">
+        <label>Telefon</label>
+        <input type="tel" placeholder="070 000 00 00">
+      </div>
+      <div class="form-group">
+        <label>Behandling</label>
+        <select>
+          <option>Naprapatbehandling – 850 kr</option>
+          <option>Sportnaprapat – 1 000 kr</option>
+          <option>Triggerpunkter – 750 kr</option>
+          <option>Rehabilitering – 950 kr</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Önskat datum</label>
+        <input type="date">
+      </div>
+      <button class="form-submit">Boka tid nu →</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="#" class="footer-logo">STOCKHOLM <span>NAPRAPAT</span></a>
+  <p>© 2025 Stockholm Naprapat. Alla rättigheter förbehållna.</p>
+  <a href="mailto:info@stockholmnaprapat.se">info@stockholmnaprapat.se</a>
+</footer>
+
+</body>
+</html>
